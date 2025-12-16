@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+  labels:
+    name: myapp-pod
+spec:
+  containers:
+    - name: myapp-container
+      image: busybox:1.28
+      env:
+        - name: FIRSTNAME
+          value: "Hanan"
+  initContainer:
+    - name: init-myservice
+      image: busybox:1.28
+      command: ["sh", "-c"]
+      args: [until nslook myservice.default.svc.cluster.local]
