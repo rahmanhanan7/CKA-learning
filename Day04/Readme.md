@@ -9,4 +9,5 @@
 - kube-proxy
 - calico
 - weave-net
-- monitoring agents etc
+- monitoring agents
+- logging agents
