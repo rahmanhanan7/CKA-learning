@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2025-12-17T10:51:59Z"
+  generation: 1
+  labels:
+    run: redis
+  name: redis
+  namespace: default
+  resourceVersion: "59832"
+  uid: 3ca406ae-4fc6-4853-9ea7-24a841a36f3c
+spec:
+  containers:
+    - image: redis
+      imagePullPolicy: Always
+      name: redis
+      ports:
+        - containerPort: 80
+          protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+        - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          name: kube-api-access-vff6b
+          readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations: #toleration
+    - effect: NoSchedule
+      key: gpu
+      operator: Equal
+      value: "true"
+  volumes:
+    - name: kube-api-access-vff6b
+      projected:
+        defaultMode: 420
+        sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              items:
+                - key: ca.crt
+                  path: ca.crt
+              name: kube-root-ca.crt
+          - downwardAPI:
+              items:
+                - fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+                  path: namespace
+status:
+  conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-12-17T10:51:59Z"
+      message:
+        "0/3 nodes are available: 1 node(s) had untolerated taint {gpu: false},
+        1 node(s) had untolerated taint {gpu: true}, 1 node(s) had untolerated taint
+        {node-role.kubernetes.io/control-plane: }. no new claims to deallocate, preemption:
+        0/3 nodes are available: 3 Preemption is not helpful for scheduling."
+      observedGeneration: 1
+      reason: Unschedulable
+      status: "False"
+      type: PodScheduled
+  phase: Pending
+  qosClass: BestEffort
